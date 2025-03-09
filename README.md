@@ -18,7 +18,11 @@ springboot-test
    │  │           ├─ controller
    │  │           │  └─ UserController.java
    │  │           ├─ dto
+   │  │           │  ├─ BaseUserDTO.java
+   │  │           │  ├─ UserCreationDTO.java
+   │  │           │  └─ UserDTO.java
    │  │           ├─ exception
+   │  │           │  ├─ GlobalExceptionHandler.java
    │  │           │  └─ ResourceNotFoundException.java
    │  │           ├─ model
    │  │           │  └─ User.java
@@ -28,6 +32,7 @@ springboot-test
    │  │           │  ├─ UserService.java
    │  │           │  └─ UserServiceImpl.java
    │  │           └─ util
+   │  │              └─ UserMapper.java
    │  └─ resources
    │     ├─ application.properties
    │     ├─ static

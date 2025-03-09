@@ -5,42 +5,57 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.gravis.springboot_test.dto.UserCreationDTO;
+import com.gravis.springboot_test.dto.UserDTO;
 import com.gravis.springboot_test.model.User;
 import com.gravis.springboot_test.service.UserService;
+import com.gravis.springboot_test.util.UserMapper;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
     
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<UserDTO> userDTOs = userMapper.toDTOList(users);
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserDTO userDTO = userMapper.toDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User newUser = userService.createUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreationDTO userCreationDTO) {
+        User userToCreate = userMapper.toEntity(userCreationDTO);
+        User createdUser = userService.createUser(userToCreate);
+        UserDTO userDTO = userMapper.toDTO(createdUser);
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updateUser = userService.updateUser(id, user);
-        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
+        User existingUser = userService.getUserById(id);
+        userMapper.updateEntityFromDTO(existingUser, userDTO);
+        User updateUser = userService.updateUser(id, existingUser);
+        UserDTO updateUserDTO = userMapper.toDTO(updateUser);
+        return new ResponseEntity<>(updateUserDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
