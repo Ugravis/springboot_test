@@ -1,3 +1,4 @@
+Run projet: **./gradlew bootRun**
 
 ```
 springboot-test
@@ -13,7 +14,20 @@ springboot-test
    │  │  └─ com
    │  │     └─ gravis
    │  │        └─ springboot_test
-   │  │           └─ SpringbootTestApplication.java
+   │  │           ├─ SpringbootTestApplication.java
+   │  │           ├─ controller
+   │  │           │  └─ UserController.java
+   │  │           ├─ dto
+   │  │           ├─ exception
+   │  │           │  └─ ResourceNotFoundException.java
+   │  │           ├─ model
+   │  │           │  └─ User.java
+   │  │           ├─ repository
+   │  │           │  └─ UserRepository.java
+   │  │           ├─ service
+   │  │           │  ├─ UserService.java
+   │  │           │  └─ UserServiceImpl.java
+   │  │           └─ util
    │  └─ resources
    │     ├─ application.properties
    │     ├─ static
